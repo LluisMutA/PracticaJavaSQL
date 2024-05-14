@@ -1,4 +1,3 @@
-import javax.print.attribute.HashPrintServiceAttributeSet;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -7,7 +6,7 @@ import java.util.ArrayList;
 public class Table {
     String name;
     String[]  capcaleres;
-    List<Fila> files;
+    List<Fila> files = new ArrayList<>();
 
     Table(String sentenciaCreate) {
         System.out.println("CREATE: " + sentenciaCreate);
@@ -17,8 +16,7 @@ public class Table {
         this.name = sentenciaCreate.split(" ")[2];
         this.capcaleres = cols.split(", ");
         System.out.println(Arrays.toString(capcaleres));
-
-        this.files = new ArrayList<>();
+        // afegir a files els valor separats per comes (files.add(f))
     }
 
     void insertData(String valorsSeparatsPerComa) {
