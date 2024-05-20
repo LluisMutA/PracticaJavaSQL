@@ -38,16 +38,21 @@ public class Database2 {
 
     private static String doSelect(String instruction) {
         String selection = "";
+        String tableName = "";
 
-        int start = instruction.indexOf("FROM") + 5;
-        //int stop = intruction.indexOf(" ");    ------ Per fer
-        String tableName = instruction.substring(start).trim();
+        int startSelec = instruction.indexOf("SELECT") + 7;
+        int endSelec = instruction.indexOf("FROM");
+        selection = instruction.substring(startSelec, endSelec).trim();
+
+        int startName = instruction.indexOf("FROM") + 5;
+        int stopName = instruction.indexOf(" ");   // ------ Per fer, ara dona OOB perque acaba l'String
+        tableName = instruction.substring(startName, stopName).trim();
         Table2 table = tables.get(tableName);
 
         // falta if
-       // if ((instruction.indexOf("SELECT") + 7) == '*') {
+        if (selection.equals("*")) {
             return table.selectAll(); // SELECT * FROM
-        //}
-        //return "";
+        }
+        return "";
     }
 }
