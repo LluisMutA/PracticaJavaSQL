@@ -37,6 +37,8 @@ public class Database2 {
         String selection = "";
         String tableName = "";
         String orderByColumn = "";
+        String whereColumn = "";
+        String whereValue = "";
         boolean isAscending = true;
 
         int startSelec = instruction.indexOf("SELECT") + 7;
@@ -45,6 +47,9 @@ public class Database2 {
 
         int start = instruction.indexOf("FROM") + 5;
         int end = instruction.indexOf("ORDER BY");
+        if (end == -1) {
+            end = instruction.indexOf("WHERE");
+        }
         if (end == -1) {
             tableName = instruction.substring(start).trim();
         } else {
@@ -56,6 +61,18 @@ public class Database2 {
         }
 
         Table2 table = tables.get(tableName);
+
+        if (instruction.contains("WHERE")) {
+            start = instruction.indexOf("WHERE") + 6;
+            end = instruction.indexOf("ORDER BY");
+            if (end == -1) {
+                end = instruction.length();
+            }
+            String whereClause = instruction.substring(start, end).trim();
+            String[] whereParts = whereClause.split(" = ");
+            whereColumn = whereParts[0].trim();
+            whereValue = whereParts[1].trim();
+        }
 
         if (instruction.contains("ORDER BY")) {
             start = instruction.indexOf("ORDER BY") + 9;
@@ -77,6 +94,6 @@ public class Database2 {
             selectedColumns = selection.split(", ");
         }
 
-        return table.selectColumnsWithOrder(selectedColumns, orderByColumn, isAscending);
+        return table.selectColumnsWithFilterAndOrder(selectedColumns, whereColumn, whereValue, orderByColumn, isAscending);
     }
 }

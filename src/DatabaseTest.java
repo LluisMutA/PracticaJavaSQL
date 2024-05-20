@@ -124,7 +124,7 @@ public class DatabaseTest {
                 "United Kingdom | 67000000   | English\n" +
                 "United States  | 331000000  | English";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test
@@ -138,7 +138,7 @@ public class DatabaseTest {
                 "Mexico    | 129000000\n" +
                 "Argentina | 45000000";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
 

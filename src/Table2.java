@@ -29,7 +29,15 @@ public class Table2 {
         rows.add(fila);
     }
 
-    public String selectColumnsWithOrder(String[] selectedColumns, String orderByColumn, boolean isAscending) {
+    public String selectColumnsWithFilterAndOrder(String[] selectedColumns, String whereColumn, String whereValue, String orderByColumn, boolean isAscending) {
+        // Filtrar filas según la cláusula WHERE
+        List<Fila2> filteredRows = new ArrayList<>();
+        for (Fila2 row : rows) {
+            if (whereColumn.isEmpty() || row.getValue(whereColumn, this).equals(whereValue)) {
+                filteredRows.add(row);
+            }
+        }
+
         // Calcular el ancho máximo de cada columna seleccionada
         int[] maxLengths = new int[selectedColumns.length];
         for (int i = 0; i < selectedColumns.length; i++) {
@@ -40,7 +48,7 @@ public class Table2 {
             maxLengths[i] = columns[colIndex].length();
         }
 
-        for (Fila2 row : rows) {
+        for (Fila2 row : filteredRows) {
             for (int i = 0; i < selectedColumns.length; i++) {
                 String value = row.getValue(selectedColumns[i], this);
                 maxLengths[i] = Math.max(maxLengths[i], value.length());
@@ -49,7 +57,7 @@ public class Table2 {
 
         // Ordenar las filas si se ha especificado una columna para ordenar
         if (!orderByColumn.isEmpty()) {
-            rows.sort((row1, row2) -> {
+            filteredRows.sort((row1, row2) -> {
                 String value1 = row1.getValue(orderByColumn, this);
                 String value2 = row2.getValue(orderByColumn, this);
                 if (isAscending) {
@@ -76,7 +84,7 @@ public class Table2 {
         result.append("\n");
 
         // Añadir filas
-        for (Fila2 row : rows) {
+        for (Fila2 row : filteredRows) {
             for (int i = 0; i < selectedColumns.length; i++) {
                 String value = row.getValue(selectedColumns[i], this);
                 result.append(String.format("%-" + maxLengths[i] + "s | ", value));
