@@ -93,7 +93,7 @@ public class DatabaseTest {
                 "Meowzilla       | Jack  | 4.01\n" +
                 "Fluffington     | Jack  | 4.23";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test

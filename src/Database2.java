@@ -44,15 +44,17 @@ public class Database2 {
         int endSelec = instruction.indexOf("FROM");
         selection = instruction.substring(startSelec, endSelec).trim();
 
-        int startName = instruction.indexOf("FROM") + 5;
-        int stopName = instruction.indexOf(" ");   // ------ Per fer, ara dona OOB perque acaba l'String
-        tableName = instruction.substring(startName, stopName).trim();
+        int start = instruction.indexOf("FROM") + 5;
+        tableName = instruction.substring(start).trim();
+        if(tableName.contains(" ")) {
+            tableName = tableName.substring(0, tableName.indexOf(" "));
+        }
         Table2 table = tables.get(tableName);
 
         // falta if
-        if (selection.equals("*")) {
+        // if (selection.equals("*")) {
             return table.selectAll(); // SELECT * FROM
-        }
-        return "";
+        // }
+      //  return "";
     }
 }
