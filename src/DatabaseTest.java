@@ -42,7 +42,7 @@ public class DatabaseTest {
                     "Mary\n" +
                     "John";
 
-            assertEquals(expected, Database.exec(instructions));
+            assertEquals(expected, Database2.exec(instructions));
         }
 
     @Test
@@ -59,7 +59,7 @@ public class DatabaseTest {
                 "Nibbles         | Balinese | Mary  | 3.75\n" +
                 "Purrlock Holmes | Persian  | John  | 3.96";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class DatabaseTest {
                 "Nibbles\n" +
                 "Purrlock Holmes";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test
