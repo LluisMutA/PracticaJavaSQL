@@ -14,4 +14,11 @@ public class Fila2 {
     public List<String> getValues() {
         return values;
     }
+
+    public String getValue(String column, Table2 table) {
+        int columnIndex = table.getColumnIndex(column);
+        return values.get(columnIndex);
+    }
+
+
 }

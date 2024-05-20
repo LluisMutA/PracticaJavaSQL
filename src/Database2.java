@@ -43,19 +43,20 @@ public class Database2 {
 
         int start = instruction.indexOf("FROM") + 5;
         tableName = instruction.substring(start).trim();
-        if(tableName.contains(" ")) {
+        if (tableName.contains(" ")) {
             tableName = tableName.substring(0, tableName.indexOf(" "));
         }
         Table2 table = tables.get(tableName);
 
-        // falta if
-        // if (selection.equals("*")) {
+        if (selection.equals("*")) {
             return table.selectAll(); // SELECT * FROM
-        // fer .remove dels valors que no ens demanen
-        // intstruction.contains():
-        // if true Okey --- if False table.remove(Owner(o els parametrees que no conincideixen)
-
-        // }
-      //  return "";
+        } else {
+            String[] selectedColumns = selection.split(",");
+            for (int i = 0; i < selectedColumns.length; i++) {
+                selectedColumns[i] = selectedColumns[i].trim();
+            }
+            return table.selectColumns(selectedColumns);
+        }
     }
+
 }

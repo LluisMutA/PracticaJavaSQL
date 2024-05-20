@@ -74,10 +74,72 @@ public class Table2 {
         return finalResult.toString().trim();
     }
 
-//    int indexDeColumna(String col) {
-//        Fila2 fila = new Fila2;
-//        fila
-//    }
+    public String selectColumns(String[] selectedColumns) {
+        // Calcular el ancho máximo de cada columna seleccionada
+        int[] maxLengths = new int[selectedColumns.length];
+        for (int i = 0; i < selectedColumns.length; i++) {
+            for (int j = 0; j < columns.length; j++) {
+                if (columns[j].equals(selectedColumns[i])) {
+                    maxLengths[i] = columns[j].length();
+                    break;
+                }
+            }
+        }
+
+        for (Fila2 row : rows) {
+            for (int i = 0; i < selectedColumns.length; i++) {
+                String value = row.getValue(selectedColumns[i], this);
+                maxLengths[i] = Math.max(maxLengths[i], value.length());
+            }
+        }
+
+        // Construir el resultado con formato
+        StringBuilder result = new StringBuilder();
+
+        // Añadir encabezados de columna
+        for (int i = 0; i < selectedColumns.length; i++) {
+            result.append(String.format("%-" + maxLengths[i] + "s | ", selectedColumns[i]));
+        }
+        result.delete(result.length() - 3, result.length()).append("\n");
+
+        // Añadir separadores
+        for (int i = 0; i < selectedColumns.length; i++) {
+            result.append("-".repeat(maxLengths[i])).append("--+");
+        }
+        result.delete(result.length() - 2, result.length()).append("\n");
+
+        // Añadir filas
+        for (Fila2 row : rows) {
+            for (int i = 0; i < selectedColumns.length; i++) {
+                String value = row.getValue(selectedColumns[i], this);
+                result.append(String.format("%-" + maxLengths[i] + "s | ", value));
+            }
+            result.delete(result.length() - 3, result.length()).append("\n");
+        }
+
+        // Eliminar los espacios finales de las filas
+        String formattedResult = result.toString();
+        String[] lines = formattedResult.split("\n");
+        StringBuilder finalResult = new StringBuilder();
+
+        for (String line : lines) {
+            finalResult.append(line.stripTrailing()).append("\n");
+        }
+
+        return finalResult.toString().trim();
+    }
+
+
+
+    public int getColumnIndex(String column) {
+        for (int i = 0; i < columns.length; i++) {
+            if (columns[i].equals(column)) {
+                return i;
+            }
+        }
+        return -1; // No debería suceder si se usa correctamente
+    }
+
 
     public String selectChoose(){
         // futur return
