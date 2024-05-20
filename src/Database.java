@@ -22,7 +22,6 @@ public class Database {
 
     public static String exec(String data) {
         List<String> taula = new ArrayList<>();
-        String capçalera = new String();
         String[] instructions = data.split("\n");
 
         for (String instruction : instructions) {
@@ -48,9 +47,7 @@ public class Database {
             }
             if(instruction.startsWith("SELECT")){
                 String res = doSelect(instruction);
-                capçalera = String.valueOf("S".indexOf(instruction) + instructions.length) + "\n";
             }
-            System.out.println(capçalera);
         }
 
         StringBuilder result = new StringBuilder();
@@ -67,15 +64,23 @@ public class Database {
         String nomTaula = "";
         String colSelec = "";
         String selection = "";
-        if(instruction.startsWith("SELECT")){
-            int start = instruction.indexOf(" ");
-            int end = instruction.indexOf("FROM");
-            selection = instruction.substring(start, end);
-            if(selection.equals("*")){
 
-            }
+        int start = instruction.indexOf("SELECT ") + 6;
+        int end = instruction.indexOf("FROM");
+        selection = instruction.substring(start, end).trim();
+        if(selection.equals("*")){
+            // Selecciona tots els camps
+            return doSelect2(sqlTable.capcaleres);
+        } else {
+            // Només seleccionem algunes columnes
+            String[] capSleleccionades = selection.split(", ");
+            return doSelect2(capSleleccionades);
         }
+    }
 
+    private static String doSelect2(String[] capcaleres) {
+        System.out.println("-------> " + Arrays.toString(capcaleres));
+        
         return null;
     }
 }
