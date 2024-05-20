@@ -1,10 +1,7 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Database2 {
-    static Map<String, Table2> tables = new HashMap<>();
+    static Map<String, Table2> tables = new LinkedHashMap<>();
 
     public static String exec(String data) {
         String[] instructions = data.split("\n");
@@ -49,11 +46,16 @@ public class Database2 {
         if(tableName.contains(" ")) {
             tableName = tableName.substring(0, tableName.indexOf(" "));
         }
+
         Table2 table = tables.get(tableName);
 
         // falta if
         // if (selection.equals("*")) {
             return table.selectAll(); // SELECT * FROM
+        // fer .remove dels valors que no ens demanen
+        // intstruction.contains():
+        // if true Okey --- if False table.remove(Owner(o els parametrees que no conincideixen)
+
         // }
       //  return "";
     }
