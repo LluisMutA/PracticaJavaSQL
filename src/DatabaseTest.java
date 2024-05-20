@@ -110,7 +110,7 @@ public class DatabaseTest {
                 "Meowzilla       | Jack\n" +
                 "Fluffington     | Jack";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test

@@ -19,6 +19,9 @@ public class Table2 {
         return name;
     }
 
+    public String[] getColumns() {
+        return columns;
+    }
 
     void insertData(String valuesString) {
         String[] values = valuesString.split(", ");
@@ -26,64 +29,15 @@ public class Table2 {
         rows.add(fila);
     }
 
-    public String selectAll() {
-        // amplada columna
-        int[] maxLengths = new int[columns.length];
-        for (int i = 0; i < columns.length; i++) {
-            maxLengths[i] = columns[i].length();
-        }
-
-        for (Fila2 row : rows) {
-            List<String> values = row.getValues();
-            for (int i = 0; i < values.size(); i++) {
-                maxLengths[i] = Math.max(maxLengths[i], values.get(i).length());
-            }
-        }
-        StringBuilder result = new StringBuilder();
-
-        // capçalera
-        for (int i = 0; i < columns.length; i++) {
-            result.append(String.format("%-" + maxLengths[i] + "s | ", columns[i]));
-        }
-        result.delete(result.length() - 3, result.length()).append("\n");
-
-
-        for (int i = 0; i < columns.length; i++) {
-            result.append("-".repeat(maxLengths[i])).append("-+-");
-        }
-        result.delete(result.length() - 2, result.length()).append("\n");
-
-        // afegir files
-        for (Fila2 row : rows) {
-            List<String> values = row.getValues();
-            for (int i = 0; i < values.size(); i++) {
-                result.append(String.format("%-" + maxLengths[i] + "s | ", values.get(i)));
-            }
-            result.delete(result.length() - 3, result.length()).append("\n");
-        }
-
-        // trim de files
-        String formattedResult = result.toString();
-        String[] lines = formattedResult.split("\n");
-        StringBuilder finalResult = new StringBuilder();
-
-        for (String line : lines) {
-            finalResult.append(line.stripTrailing()).append("\n");
-        }
-
-        return finalResult.toString().trim();
-    }
-
-    public String selectColumns(String[] selectedColumns) {
+    public String selectColumnsWithOrder(String[] selectedColumns, String orderByColumn, boolean isAscending) {
         // Calcular el ancho máximo de cada columna seleccionada
         int[] maxLengths = new int[selectedColumns.length];
         for (int i = 0; i < selectedColumns.length; i++) {
-            for (int j = 0; j < columns.length; j++) {
-                if (columns[j].equals(selectedColumns[i])) {
-                    maxLengths[i] = columns[j].length();
-                    break;
-                }
+            int colIndex = getColumnIndex(selectedColumns[i]);
+            if (colIndex == -1) {
+                throw new IllegalArgumentException("Columna no encontrada: " + selectedColumns[i]);
             }
+            maxLengths[i] = columns[colIndex].length();
         }
 
         for (Fila2 row : rows) {
@@ -91,6 +45,19 @@ public class Table2 {
                 String value = row.getValue(selectedColumns[i], this);
                 maxLengths[i] = Math.max(maxLengths[i], value.length());
             }
+        }
+
+        // Ordenar las filas si se ha especificado una columna para ordenar
+        if (!orderByColumn.isEmpty()) {
+            rows.sort((row1, row2) -> {
+                String value1 = row1.getValue(orderByColumn, this);
+                String value2 = row2.getValue(orderByColumn, this);
+                if (isAscending) {
+                    return value1.compareTo(value2);
+                } else {
+                    return value2.compareTo(value1);
+                }
+            });
         }
 
         // Construir el resultado con formato
@@ -104,9 +71,9 @@ public class Table2 {
 
         // Añadir separadores
         for (int i = 0; i < selectedColumns.length; i++) {
-            result.append("-".repeat(maxLengths[i])).append("--+");
+            result.append("-".repeat(maxLengths[i])).append(i < selectedColumns.length - 1 ? "-+-" : "-");
         }
-        result.delete(result.length() - 2, result.length()).append("\n");
+        result.append("\n");
 
         // Añadir filas
         for (Fila2 row : rows) {
@@ -129,27 +96,12 @@ public class Table2 {
         return finalResult.toString().trim();
     }
 
-
-
-    public int getColumnIndex(String column) {
+    public int getColumnIndex(String columnName) {
         for (int i = 0; i < columns.length; i++) {
-            if (columns[i].equals(column)) {
+            if (columns[i].equals(columnName)) {
                 return i;
             }
         }
-        return -1; // No debería suceder si se usa correctamente
-    }
-
-
-    public String selectChoose(){
-        // futur return
-        StringBuilder result = new StringBuilder();
-
-        // trim de files
-        String formattedResult = result.toString();
-        String[] lines = formattedResult.split("\n");
-        StringBuilder finalResult = new StringBuilder();
-
-        return finalResult.toString().trim();
+        return -1; // Si no se encuentra la columna, retorna -1
     }
 }

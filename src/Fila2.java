@@ -15,10 +15,11 @@ public class Fila2 {
         return values;
     }
 
-    public String getValue(String column, Table2 table) {
-        int columnIndex = table.getColumnIndex(column);
+    public String getValue(String columnName, Table2 table) {
+        int columnIndex = table.getColumnIndex(columnName);
+        if (columnIndex == -1) {
+            throw new IllegalArgumentException("Columna no encontrada: " + columnName);
+        }
         return values.get(columnIndex);
     }
-
-
 }

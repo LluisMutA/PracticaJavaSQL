@@ -36,27 +36,47 @@ public class Database2 {
     private static String doSelect(String instruction) {
         String selection = "";
         String tableName = "";
+        String orderByColumn = "";
+        boolean isAscending = true;
 
         int startSelec = instruction.indexOf("SELECT") + 7;
         int endSelec = instruction.indexOf("FROM");
         selection = instruction.substring(startSelec, endSelec).trim();
 
         int start = instruction.indexOf("FROM") + 5;
-        tableName = instruction.substring(start).trim();
+        int end = instruction.indexOf("ORDER BY");
+        if (end == -1) {
+            tableName = instruction.substring(start).trim();
+        } else {
+            tableName = instruction.substring(start, end).trim();
+        }
+
         if (tableName.contains(" ")) {
             tableName = tableName.substring(0, tableName.indexOf(" "));
         }
+
         Table2 table = tables.get(tableName);
 
-        if (selection.equals("*")) {
-            return table.selectAll(); // SELECT * FROM
-        } else {
-            String[] selectedColumns = selection.split(",");
-            for (int i = 0; i < selectedColumns.length; i++) {
-                selectedColumns[i] = selectedColumns[i].trim();
+        if (instruction.contains("ORDER BY")) {
+            start = instruction.indexOf("ORDER BY") + 9;
+            String orderClause = instruction.substring(start).trim();
+            if (orderClause.endsWith("DESC")) {
+                isAscending = false;
+                orderByColumn = orderClause.substring(0, orderClause.length() - 4).trim();
+            } else if (orderClause.endsWith("ASC")) {
+                orderByColumn = orderClause.substring(0, orderClause.length() - 3).trim();
+            } else {
+                orderByColumn = orderClause.trim();
             }
-            return table.selectColumns(selectedColumns);
         }
-    }
 
+        String[] selectedColumns;
+        if (selection.equals("*")) {
+            selectedColumns = table.getColumns();
+        } else {
+            selectedColumns = selection.split(", ");
+        }
+
+        return table.selectColumnsWithOrder(selectedColumns, orderByColumn, isAscending);
+    }
 }
