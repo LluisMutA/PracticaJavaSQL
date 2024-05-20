@@ -157,7 +157,7 @@ public class DatabaseTest {
                 "Mexico         | 129000000\n" +
                 "United States  | 331000000";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test
@@ -175,7 +175,7 @@ public class DatabaseTest {
                 "67000000   | United Kingdom\n" +
                 "45000000   | Argentina";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test
@@ -190,7 +190,7 @@ public class DatabaseTest {
                 "Mexico        | 129000000  | Spanish\n" +
                 "Germany       | 83000000   | German";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
 
@@ -210,7 +210,7 @@ public class DatabaseTest {
                 "Bill  | 1990 | Germany\n" +
                 "Mary  | 1990 | Mexico";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test
@@ -229,7 +229,7 @@ public class DatabaseTest {
                 "Tina  | 1977 | Argentina\n" +
                 "Tom   | 2000 | Germany";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test
@@ -248,7 +248,7 @@ public class DatabaseTest {
                 "Jack  | 1980 | France\n" +
                 "Tina  | 1977 | Argentina";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
 
@@ -264,7 +264,7 @@ public class DatabaseTest {
                 "Mexico        | 129000000  | Spanish\n" +
                 "Argentina     | 45000000   | Spanish";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test
@@ -277,7 +277,7 @@ public class DatabaseTest {
                 "---------------+------------+----------\n" +
                 "United Kingdom | 67000000   | English";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test
@@ -290,7 +290,7 @@ public class DatabaseTest {
                 "-----------+---------+-------+--------\n" +
                 "Meowchacho | Persian | John  | 3.65";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test
@@ -305,7 +305,7 @@ public class DatabaseTest {
                 "Tina  | 1977 | Argentina\n" +
                 "Magda | 2005 | France";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test
@@ -323,7 +323,7 @@ public class DatabaseTest {
                 "John        | Meowchacho      | 3.65\n" +
                 "John        | Purrlock Holmes | 3.96";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test
@@ -340,7 +340,7 @@ public class DatabaseTest {
                 "Jack        | Fluffington | 4.23\n" +
                 "Mary        | Nibbles     | 3.75";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test
@@ -357,7 +357,7 @@ public class DatabaseTest {
                 "Meowzilla   | Siamese   | Jack      | 4.01       | Jack        | 1980        | France\n" +
                 "Nibbles     | Balinese  | Mary      | 3.75       | Mary        | 1990        | Mexico";
 
-        assertEquals(expected, Database.exec(instructions));
+        assertEquals(expected, Database2.exec(instructions));
     }
 
     @Test
