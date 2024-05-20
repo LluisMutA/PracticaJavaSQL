@@ -46,7 +46,6 @@ public class Database2 {
         if(tableName.contains(" ")) {
             tableName = tableName.substring(0, tableName.indexOf(" "));
         }
-
         Table2 table = tables.get(tableName);
 
         // falta if

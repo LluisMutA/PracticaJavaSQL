@@ -141,6 +141,7 @@ public class DatabaseTest {
         assertEquals(expected, Database.exec(instructions));
     }
 
+
     @Test
     public void test07() {
         String instructions = db2 +
@@ -357,5 +358,32 @@ public class DatabaseTest {
                 "Nibbles     | Balinese  | Mary      | 3.75       | Mary        | 1990        | Mexico";
 
         assertEquals(expected, Database.exec(instructions));
+    }
+
+    @Test
+    public void test02_bis() {
+        String instructions = db1 + db3 +
+                "SELECT * FROM person\n" +
+                "SELECT * FROM cat";
+
+        String expected =
+                "Name  | Year | Country\n" +
+                        "------+------+-----------\n" +
+                        "Jack  | 1980 | France\n" +
+                        "Mary  | 1990 | Mexico\n" +
+                        "John  | 1985 | Argentina\n" +
+                        "Tom   | 2000 | Germany\n" +
+                        "Bill  | 1990 | Germany\n" +
+                        "Tina  | 1977 | Argentina\n" +
+                        "Magda | 2005 | France\n" +
+                        "Name            | Breed    | Owner | Weight\n" +
+                        "----------------+----------+-------+--------\n" +
+                        "Meowchacho      | Persian  | John  | 3.65\n" +
+                        "Meowzilla       | Siamese  | Jack  | 4.01\n" +
+                        "Fluffington     | Balinese | Jack  | 4.23\n" +
+                        "Nibbles         | Balinese | Mary  | 3.75\n" +
+                        "Purrlock Holmes | Persian  | John  | 3.96";
+
+        assertEquals(expected, Database2.exec(instructions));
     }
 }

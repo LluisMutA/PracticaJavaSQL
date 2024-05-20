@@ -19,6 +19,7 @@ public class Table2 {
         return name;
     }
 
+
     void insertData(String valuesString) {
         String[] values = valuesString.split(", ");
         Fila2 fila = new Fila2(values);
@@ -72,6 +73,11 @@ public class Table2 {
 
         return finalResult.toString().trim();
     }
+
+//    int indexDeColumna(String col) {
+//        Fila2 fila = new Fila2;
+//        fila
+//    }
 
     public String selectChoose(){
         // futur return
