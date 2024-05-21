@@ -29,11 +29,20 @@ public class Table2 {
         rows.add(fila);
     }
 
-    public String selectColumnsWithFilterAndOrder(String[] selectedColumns, String whereColumn, String whereValue, String orderByColumn, boolean isAscending) {
-        // Filtrar filas según la cláusula WHERE
+    public String selectColumnsWithFilterAndOrder(String[] selectedColumns, List<String> whereConditions, String orderByColumn, boolean isAscending) {
+        // Filtrar filas según las condiciones WHERE
         List<Fila2> filteredRows = new ArrayList<>();
         for (Fila2 row : rows) {
-            if (whereColumn.isEmpty() || row.getValue(whereColumn, this).equals(whereValue)) {
+            boolean match = whereConditions.isEmpty();
+            for (String condition : whereConditions) {
+                if (evaluateCondition(row, condition)) {
+                    match = true;
+                } else {
+                    match = false;
+                    break;
+                }
+            }
+            if (match) {
                 filteredRows.add(row);
             }
         }
@@ -108,6 +117,38 @@ public class Table2 {
         return finalResult.toString().trim();
     }
 
+    private boolean evaluateCondition(Fila2 row, String condition) {
+        String[] parts = condition.split(" ");
+        String column = parts[0].trim();
+        String operator = parts[1].trim();
+        String value = parts[2].trim();
+
+        String columnValue = row.getValue(column, this);
+
+        try {
+            double columnNum = Double.parseDouble(columnValue);
+            double valueNum = Double.parseDouble(value);
+
+            return switch (operator) {
+                case "=" -> columnNum == valueNum;
+                case ">" -> columnNum > valueNum;
+                case "<" -> columnNum < valueNum;
+                case ">=" -> columnNum >= valueNum;
+                case "<=" -> columnNum <= valueNum;
+                default -> false;
+            };
+        } catch (NumberFormatException e) {
+            return switch (operator) {
+                case "=" -> columnValue.equals(value);
+                case ">" -> columnValue.compareTo(value) > 0;
+                case "<" -> columnValue.compareTo(value) < 0;
+                case ">=" -> columnValue.compareTo(value) >= 0;
+                case "<=" -> columnValue.compareTo(value) <= 0;
+                default -> false;
+            };
+        }
+    }
+
     private boolean isNumericColumn(int colIndex) {
         for (Fila2 row : rows) {
             String value = row.getValues().get(colIndex);
@@ -124,6 +165,6 @@ public class Table2 {
                 return i;
             }
         }
-        return -1; // Si no se encuentra la columna, retorna -1
+        return -1;
     }
 }

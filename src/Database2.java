@@ -37,8 +37,7 @@ public class Database2 {
         String selection = "";
         String tableName = "";
         String orderByColumn = "";
-        String whereColumn = "";
-        String whereValue = "";
+        List<String> whereConditions = new ArrayList<>();
         boolean isAscending = true;
 
         int startSelec = instruction.indexOf("SELECT") + 7;
@@ -69,9 +68,7 @@ public class Database2 {
                 end = instruction.length();
             }
             String whereClause = instruction.substring(start, end).trim();
-            String[] whereParts = whereClause.split(" = ");
-            whereColumn = whereParts[0].trim();
-            whereValue = whereParts[1].trim();
+            whereConditions = Arrays.asList(whereClause.split(" AND "));
         }
 
         if (instruction.contains("ORDER BY")) {
@@ -94,6 +91,6 @@ public class Database2 {
             selectedColumns = selection.split(", ");
         }
 
-        return table.selectColumnsWithFilterAndOrder(selectedColumns, whereColumn, whereValue, orderByColumn, isAscending);
+        return table.selectColumnsWithFilterAndOrder(selectedColumns, whereConditions, orderByColumn, isAscending);
     }
 }
