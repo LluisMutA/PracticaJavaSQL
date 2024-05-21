@@ -4,18 +4,24 @@ public class Database2 {
     static Map<String, Table2> tables = new LinkedHashMap<>();
 
     public static String exec(String data) {
+        tables.clear();
         String[] instructions = data.split("\n");
 
+        StringBuilder result = new StringBuilder();
         for (String instruction : instructions) {
+            instruction = instruction.trim();
             if (instruction.startsWith("SELECT")) {
-                return doSelect(instruction);
+                if (result.length() > 0) {
+                    result.append("\n");
+                }
+                result.append(doSelect(instruction));
             } else if (instruction.startsWith("CREATE")) {
                 createTable(instruction);
             } else if (instruction.startsWith("INSERT INTO")) {
                 insertIntoTable(instruction);
             }
         }
-        return "";
+        return result.toString().trim();
     }
 
     private static void createTable(String instruction) {
