@@ -33,15 +33,7 @@ public class Table2 {
         // Filtrar filas según las condiciones WHERE
         List<Fila2> filteredRows = new ArrayList<>();
         for (Fila2 row : rows) {
-            boolean match = whereConditions.isEmpty();
-            for (String condition : whereConditions) {
-                if (evaluateCondition(row, condition)) {
-                    match = true;
-                } else {
-                    match = false;
-                    break;
-                }
-            }
+            boolean match = evaluateWhereConditions(row, whereConditions);
             if (match) {
                 filteredRows.add(row);
             }
@@ -102,20 +94,46 @@ public class Table2 {
                 String value = row.getValue(selectedColumns[i], this);
                 result.append(String.format("%-" + maxLengths[i] + "s | ", value));
             }
+            // Eliminar el espacio y el separador adicional al final de cada fila
             result.delete(result.length() - 3, result.length()).append("\n");
         }
 
-        // Eliminar los espacios finales de las filas
-        String formattedResult = result.toString();
-        String[] lines = formattedResult.split("\n");
+        // Eliminar el espacio y el separador adicional al final de cada fila
+        String[] lines = result.toString().split("\n");
         StringBuilder finalResult = new StringBuilder();
 
         for (String line : lines) {
-            finalResult.append(line.stripTrailing()).append("\n");
+            finalResult.append(line.trim()).append("\n");
         }
 
         return finalResult.toString().trim();
     }
+
+    private boolean evaluateWhereConditions(Fila2 row, List<String> whereConditions) {
+        for (String condition : whereConditions) {
+            String[] orConditions = condition.split("\\s+OR\\s+");
+            boolean orMatch = false;
+            for (String orCondition : orConditions) {
+                String[] andConditions = orCondition.split("\\s+AND\\s+");
+                boolean andMatch = true;
+                for (String andCondition : andConditions) {
+                    if (!evaluateCondition(row, andCondition.trim())) {
+                        andMatch = false;
+                        break;
+                    }
+                }
+                if (andMatch) {
+                    orMatch = true;
+                    break;
+                }
+            }
+            if (!orMatch) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     private boolean evaluateCondition(Fila2 row, String condition) {
         String[] parts = condition.split(" ");
