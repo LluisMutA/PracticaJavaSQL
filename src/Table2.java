@@ -57,13 +57,17 @@ public class Table2 {
 
         // Ordenar las filas si se ha especificado una columna para ordenar
         if (!orderByColumn.isEmpty()) {
+            int orderColIndex = getColumnIndex(orderByColumn);
             filteredRows.sort((row1, row2) -> {
                 String value1 = row1.getValue(orderByColumn, this);
                 String value2 = row2.getValue(orderByColumn, this);
-                if (isAscending) {
-                    return value1.compareTo(value2);
+
+                if (isNumericColumn(orderColIndex)) {
+                    Double num1 = Double.parseDouble(value1);
+                    Double num2 = Double.parseDouble(value2);
+                    return isAscending ? num1.compareTo(num2) : num2.compareTo(num1);
                 } else {
-                    return value2.compareTo(value1);
+                    return isAscending ? value1.compareTo(value2) : value2.compareTo(value1);
                 }
             });
         }
@@ -102,6 +106,16 @@ public class Table2 {
         }
 
         return finalResult.toString().trim();
+    }
+
+    private boolean isNumericColumn(int colIndex) {
+        for (Fila2 row : rows) {
+            String value = row.getValues().get(colIndex);
+            if (!value.matches("\\d+(\\.\\d+)?")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public int getColumnIndex(String columnName) {
