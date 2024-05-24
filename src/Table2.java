@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Table2 {
@@ -53,19 +54,23 @@ public class Table2 {
 
         if (!orderByColumn.isEmpty()) {
             int orderColIndex = getColumnIndex(orderByColumn);
-            filteredRows.sort((row1, row2) -> {
-                String value1 = row1.getValue(orderByColumn, this);
-                String value2 = row2.getValue(orderByColumn, this);
+            Comparator<Fila2> comparator = new Comparator<>() {
+                @Override
+                public int compare(Fila2 row1, Fila2 row2) {
+                    String value1 = row1.getValue(orderByColumn, Table2.this);
+                    String value2 = row2.getValue(orderByColumn, Table2.this);
 
-                if (isNumericColumn(orderColIndex)) {
-                    Double num1 = Double.parseDouble(value1);
-                    Double num2 = Double.parseDouble(value2);
-                    return isAscending ? num1.compareTo(num2) : num2.compareTo(num1);
-                } else {
-                    return isAscending ? value1.compareTo(value2) : value2.compareTo(value1);
+                    if (isNumericColumn(orderColIndex)) {
+                        Double num1 = Double.parseDouble(value1);
+                        Double num2 = Double.parseDouble(value2);
+                        return isAscending ? num1.compareTo(num2) : num2.compareTo(num1);
+                    } else {
+                        return isAscending ? value1.compareTo(value2) : value2.compareTo(value1);
+                    }
                 }
-            }
-            );
+            };
+
+            filteredRows.sort(comparator);
         }
 
         StringBuilder result = new StringBuilder();
@@ -132,28 +137,50 @@ public class Table2 {
 
         String columnValue = row.getValue(column, this);
 
-        try {
+        if (isNumeric(columnValue) && isNumeric(value)) {
             double columnNum = Double.parseDouble(columnValue);
             double valueNum = Double.parseDouble(value);
 
-            return switch (operator) {
-                case "=" -> columnNum == valueNum;
-                case ">" -> columnNum > valueNum;
-                case "<" -> columnNum < valueNum;
-                case ">=" -> columnNum >= valueNum;
-                case "<=" -> columnNum <= valueNum;
-                default -> false;
-            };
-        } catch (NumberFormatException e) {
-            return switch (operator) {
-                case "=" -> columnValue.equals(value);
-                case ">" -> columnValue.compareTo(value) > 0;
-                case "<" -> columnValue.compareTo(value) < 0;
-                case ">=" -> columnValue.compareTo(value) >= 0;
-                case "<=" -> columnValue.compareTo(value) <= 0;
-                default -> false;
-            };
+            switch (operator) {
+                case "=":
+                    return columnNum == valueNum;
+                case ">":
+                    return columnNum > valueNum;
+                case "<":
+                    return columnNum < valueNum;
+                case ">=":
+                    return columnNum >= valueNum;
+                case "<=":
+                    return columnNum <= valueNum;
+                default:
+                    return false;
+            }
+        } else {
+            switch (operator) {
+                case "=":
+                    return columnValue.equals(value);
+                case ">":
+                    return columnValue.compareTo(value) > 0;
+                case "<":
+                    return columnValue.compareTo(value) < 0;
+                case ">=":
+                    return columnValue.compareTo(value) >= 0;
+                case "<=":
+                    return columnValue.compareTo(value) <= 0;
+                default:
+                    return false;
+            }
         }
+    }
+
+    private boolean isNumeric(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean isNumericColumn(int colIndex) {

@@ -73,8 +73,8 @@ public class Database2 {
             if (end == -1) {
                 end = instruction.length();
             }
-            String whereClause = instruction.substring(start, end).trim();
-            whereConditions = Arrays.asList(whereClause.split(" AND "));
+            String whereAbast = instruction.substring(start, end).trim();
+            whereConditions = Arrays.asList(whereAbast.split(" AND "));
         }
 
         if (instruction.contains("ORDER BY")) {
