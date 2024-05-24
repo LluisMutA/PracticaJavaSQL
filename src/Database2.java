@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Database2 {
-    static Map<String, Table2> tables = new LinkedHashMap<>();
+    static Map<String, Table2> tables = new HashMap<>();
 
     public static String exec(String data) {
         tables.clear();
@@ -97,6 +97,6 @@ public class Database2 {
             selectedColumns = selection.split(", ");
         }
 
-        return table.selectColumnsWithFilterAndOrder(selectedColumns, whereConditions, orderByColumn, isAscending);
+        return table.selectColFilter(selectedColumns, whereConditions, orderByColumn, isAscending);
     }
 }

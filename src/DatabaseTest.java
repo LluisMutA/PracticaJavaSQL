@@ -34,7 +34,7 @@ public class DatabaseTest {
         @Test
         public void test00() {
             String instructions = db4 +
-                    "SELECT *    FROM person";
+                    "SELECT * FROM person";
 
             String expected = "Name\n" +
                     "-----\n" +

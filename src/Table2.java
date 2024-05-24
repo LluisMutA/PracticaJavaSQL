@@ -29,8 +29,7 @@ public class Table2 {
         rows.add(fila);
     }
 
-    public String selectColumnsWithFilterAndOrder(String[] selectedColumns, List<String> whereConditions, String orderByColumn, boolean isAscending) {
-        // Filtrar filas según las condiciones WHERE
+    public String selectColFilter(String[] selectedColumns, List<String> whereConditions, String orderByColumn, boolean isAscending) {
         List<Fila2> filteredRows = new ArrayList<>();
         for (Fila2 row : rows) {
             boolean match = evaluateWhereConditions(row, whereConditions);
@@ -39,13 +38,9 @@ public class Table2 {
             }
         }
 
-        // Calcular el ancho máximo de cada columna seleccionada
         int[] maxLengths = new int[selectedColumns.length];
         for (int i = 0; i < selectedColumns.length; i++) {
             int colIndex = getColumnIndex(selectedColumns[i]);
-            if (colIndex == -1) {
-                throw new IllegalArgumentException("Columna no encontrada: " + selectedColumns[i]);
-            }
             maxLengths[i] = columns[colIndex].length();
         }
 
@@ -56,7 +51,6 @@ public class Table2 {
             }
         }
 
-        // Ordenar las filas si se ha especificado una columna para ordenar
         if (!orderByColumn.isEmpty()) {
             int orderColIndex = getColumnIndex(orderByColumn);
             filteredRows.sort((row1, row2) -> {
@@ -70,35 +64,30 @@ public class Table2 {
                 } else {
                     return isAscending ? value1.compareTo(value2) : value2.compareTo(value1);
                 }
-            });
+            }
+            );
         }
 
-        // Construir el resultado con formato
         StringBuilder result = new StringBuilder();
 
-        // Añadir encabezados de columna
         for (int i = 0; i < selectedColumns.length; i++) {
             result.append(String.format("%-" + maxLengths[i] + "s | ", selectedColumns[i]));
         }
         result.delete(result.length() - 3, result.length()).append("\n");
 
-        // Añadir separadores
         for (int i = 0; i < selectedColumns.length; i++) {
             result.append("-".repeat(maxLengths[i])).append(i < selectedColumns.length - 1 ? "-+-" : "-");
         }
         result.append("\n");
 
-        // Añadir filas
         for (Fila2 row : filteredRows) {
             for (int i = 0; i < selectedColumns.length; i++) {
                 String value = row.getValue(selectedColumns[i], this);
                 result.append(String.format("%-" + maxLengths[i] + "s | ", value));
             }
-            // Eliminar el espacio y el separador adicional al final de cada fila
             result.delete(result.length() - 3, result.length()).append("\n");
         }
 
-        // Eliminar el espacio y el separador adicional al final de cada fila
         String[] lines = result.toString().split("\n");
         StringBuilder finalResult = new StringBuilder();
 
@@ -183,6 +172,6 @@ public class Table2 {
                 return i;
             }
         }
-        return -1;
+        return 0;
     }
 }
